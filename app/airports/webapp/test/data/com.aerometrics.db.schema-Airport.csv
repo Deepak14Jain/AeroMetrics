@@ -1,0 +1,7 @@
+icaoCode,iataCode,name,city,state,country_code,elevation,latitude,longitude,timezone_code
+00AK,,Lowell Field,Anchor Point,Alaska,US,450,59.94919968,-151.695999146,America/Anchorage
+00AL,,Epps Airpark,Harvest,Alabama,US,820,34.8647994995,-86.7703018188,America/Chicago
+00AZ,,Cordes Airport,Cordes,Arizona,US,3810,34.3055992126,-112.1650009155,America/Phoenix
+ZUDC,DCY,Daocheng Yading Airport,Daocheng County,Sichuan,CN,14472,29.323056,100.053333,Asia/Shanghai
+ZUDR,DDR,Rikaze Dingri Airport,,Tibet,CN,14108,28.6025,86.8103,Asia/Shanghai
+ZUDX,DAX,Dachuan Airport,Dazhou,Sichuan,CN,0,31.1302,107.4295,Asia/Shanghai

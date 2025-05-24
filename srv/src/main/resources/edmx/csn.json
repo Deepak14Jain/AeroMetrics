@@ -1,0 +1,2316 @@
+{
+  "namespace": "com.aerometrics.db.schema",
+  "definitions": {
+    "com.aerometrics.db.schema.Airport": {
+      "kind": "entity",
+      "elements": {
+        "icaoCode": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "iataCode": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "name": {
+          "type": "cds.String"
+        },
+        "city": {
+          "type": "cds.String"
+        },
+        "state": {
+          "type": "cds.String"
+        },
+        "country": {
+          "doc": "Type for an association to Countries\n\nSee https://cap.cloud.sap/docs/cds/common#type-country",
+          "@title": "{i18n>Country}",
+          "@description": "{i18n>CountryCode.Description}",
+          "type": "cds.Association",
+          "target": "sap.common.Countries",
+          "keys": [
+            {
+              "ref": [
+                "code"
+              ],
+              "$generatedFieldName": "country_code"
+            }
+          ],
+          "@Common.Label": "{i18n>Country}",
+          "@Core.Description": "{i18n>CountryCode.Description}"
+        },
+        "country_code": {
+          "type": "cds.String",
+          "length": 3,
+          "@odata.foreignKey4": "country",
+          "@title": "{i18n>Country}",
+          "@description": "{i18n>CountryCode.Description}",
+          "@Common.Label": "{i18n>Country}",
+          "@Core.Description": "{i18n>CountryCode.Description}"
+        },
+        "elevation": {
+          "type": "cds.Integer"
+        },
+        "avgElevation": {
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 2
+        },
+        "latitude": {
+          "type": "cds.Decimal",
+          "precision": 9,
+          "scale": 6
+        },
+        "longitude": {
+          "type": "cds.Decimal",
+          "precision": 9,
+          "scale": 6
+        },
+        "coordinates": {
+          "@Core.Computed": true,
+          "virtual": true,
+          "type": "cds.String"
+        },
+        "timezone": {
+          "doc": "Type for an association to Timezones\n\nSee https://cap.cloud.sap/docs/cds/common#type-timezone",
+          "type": "cds.Association",
+          "target": "sap.common.Timezones",
+          "keys": [
+            {
+              "ref": [
+                "code"
+              ],
+              "$generatedFieldName": "timezone_code"
+            }
+          ]
+        },
+        "timezone_code": {
+          "type": "cds.String",
+          "length": 100,
+          "@odata.foreignKey4": "timezone"
+        },
+        "region": {
+          "@Core.Computed": true,
+          "virtual": true,
+          "type": "cds.String"
+        },
+        "criticality": {
+          "@assert.range": [
+            0,
+            5
+          ],
+          "@Core.Computed": true,
+          "virtual": true,
+          "type": "cds.Integer",
+          "@Validation.Minimum": 0,
+          "@Validation.Maximum": 5
+        },
+        "airportCount": {
+          "@Core.Computed": true,
+          "virtual": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "AeroMetricsService": {
+      "@source": "service.cds",
+      "kind": "service"
+    },
+    "AeroMetricsService.TimeZoneAirportCount": {
+      "kind": "entity",
+      "@UI.LineItem#tableView": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "timezone_code"
+          },
+          "Label": "{i18n>Timezone}",
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "airportCount"
+          },
+          "Label": "Number of Airports",
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "@UI.SelectionPresentationVariant#tableView.$Type": "UI.SelectionPresentationVariantType",
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.$Type": "UI.PresentationVariantType",
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.Visualizations": [
+        "@UI.LineItem#tableView"
+      ],
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.SortOrder": [
+        {
+          "$Type": "Common.SortOrderType",
+          "Property": {
+            "=": "airportCount"
+          },
+          "Descending": true
+        }
+      ],
+      "@UI.SelectionPresentationVariant#tableView.SelectionVariant.$Type": "UI.SelectionVariantType",
+      "@UI.SelectionPresentationVariant#tableView.SelectionVariant.SelectOptions": [],
+      "@UI.SelectionPresentationVariant#tableView.Text": "{i18n>MostCommonTimezones}",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "com.aerometrics.db.schema.Airport"
+            ]
+          },
+          "columns": [
+            {
+              "key": true,
+              "ref": [
+                "timezone"
+              ]
+            },
+            {
+              "func": "count",
+              "args": [
+                {
+                  "ref": [
+                    "icaoCode"
+                  ]
+                }
+              ],
+              "as": "airportCount",
+              "cast": {
+                "type": "cds.Integer"
+              }
+            }
+          ],
+          "groupBy": [
+            {
+              "ref": [
+                "timezone_code"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "timezone": {
+          "doc": "Type for an association to Timezones\n\nSee https://cap.cloud.sap/docs/cds/common#type-timezone",
+          "@Common.Text": {
+            "=": "timezone_code"
+          },
+          "@Common.Text.@UI.TextArrangement": {
+            "#": "TextOnly"
+          },
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "key": true,
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Timezones",
+          "keys": [
+            {
+              "ref": [
+                "code"
+              ],
+              "$generatedFieldName": "timezone_code"
+            }
+          ],
+          "@Common.ValueList.viaAssociation": {
+            "=": "timezone"
+          }
+        },
+        "timezone_code": {
+          "type": "cds.String",
+          "length": 100,
+          "@odata.foreignKey4": "timezone",
+          "@Common.Text": {
+            "=": "timezone_code"
+          },
+          "@Common.Text.@UI.TextArrangement": {
+            "#": "TextOnly"
+          },
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "key": true
+        },
+        "airportCount": {
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@UI.AdaptationHidden": true,
+          "@UI.HiddenFilter": true,
+          "@Core.Computed": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "AeroMetricsService.AvgElevationPerCountry": {
+      "kind": "entity",
+      "@UI.LineItem#tableView": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "country.name"
+          },
+          "Label": "{i18n>Country}",
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "avgElevation"
+          },
+          "Label": "{i18n>AverageElevation}",
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "@UI.SelectionPresentationVariant#tableView.$Type": "UI.SelectionPresentationVariantType",
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.$Type": "UI.PresentationVariantType",
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.Visualizations": [
+        "@UI.LineItem#tableView"
+      ],
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.SortOrder": [
+        {
+          "$Type": "Common.SortOrderType",
+          "Property": {
+            "=": "avgElevation"
+          },
+          "Descending": true
+        }
+      ],
+      "@UI.SelectionPresentationVariant#tableView.SelectionVariant.$Type": "UI.SelectionVariantType",
+      "@UI.SelectionPresentationVariant#tableView.SelectionVariant.SelectOptions": [],
+      "@UI.SelectionPresentationVariant#tableView.Text": "Average Elevations",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "com.aerometrics.db.schema.Airport"
+            ]
+          },
+          "columns": [
+            {
+              "key": true,
+              "ref": [
+                "country"
+              ]
+            },
+            {
+              "func": "round",
+              "args": [
+                {
+                  "func": "avg",
+                  "args": [
+                    {
+                      "ref": [
+                        "elevation"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "val": 2
+                }
+              ],
+              "as": "avgElevation",
+              "cast": {
+                "type": "cds.Decimal",
+                "precision": 10,
+                "scale": 2
+              }
+            }
+          ],
+          "groupBy": [
+            {
+              "ref": [
+                "country",
+                "name"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "country": {
+          "doc": "Type for an association to Countries\n\nSee https://cap.cloud.sap/docs/cds/common#type-country",
+          "@Common.Text": {
+            "=": "country.name"
+          },
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@title": "{i18n>Country}",
+          "@description": "{i18n>CountryCode.Description}",
+          "key": true,
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Countries",
+          "keys": [
+            {
+              "ref": [
+                "code"
+              ],
+              "$generatedFieldName": "country_code"
+            }
+          ],
+          "@Common.Label": "{i18n>Country}",
+          "@Core.Description": "{i18n>CountryCode.Description}",
+          "@Common.ValueList.viaAssociation": {
+            "=": "country"
+          }
+        },
+        "country_code": {
+          "type": "cds.String",
+          "length": 3,
+          "@odata.foreignKey4": "country",
+          "@Common.Text": {
+            "=": "country.name"
+          },
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@title": "{i18n>Country}",
+          "@description": "{i18n>CountryCode.Description}",
+          "key": true,
+          "@Common.Label": "{i18n>Country}",
+          "@Core.Description": "{i18n>CountryCode.Description}"
+        },
+        "avgElevation": {
+          "@Measures.Unit": "feet",
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@UI.AdaptationHidden": true,
+          "@UI.HiddenFilter": true,
+          "@Core.Computed": true,
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 2
+        }
+      }
+    },
+    "AeroMetricsService.Airports": {
+      "kind": "entity",
+      "@odata.draft.enabled": true,
+      "@UI.FieldGroup#GeneratedGroup.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#GeneratedGroup.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>IcaoCode}",
+          "Value": {
+            "=": "icaoCode"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>IataCode}",
+          "Value": {
+            "=": "iataCode"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Airport}",
+          "Value": {
+            "=": "name"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>City}",
+          "Value": {
+            "=": "city"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>State}",
+          "Value": {
+            "=": "state"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Country}",
+          "Value": {
+            "=": "country_code"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Elevation}",
+          "Value": {
+            "=": "elevation"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Latitude}",
+          "Value": {
+            "=": "latitude"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Longitude}",
+          "Value": {
+            "=": "longitude"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Timezone}",
+          "Value": {
+            "=": "timezone_code"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.ReferenceFacet",
+          "ID": "GeneratedFacet1",
+          "Label": "General Information",
+          "Target": "@UI.FieldGroup#GeneratedGroup"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>Airport}",
+          "Value": {
+            "=": "name"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>IcaoCode}",
+          "Value": {
+            "=": "icaoCode"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>IataCode}",
+          "Value": {
+            "=": "iataCode"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Label": "{i18n>City}",
+          "Value": {
+            "=": "city"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "region"
+          },
+          "Label": "{i18n>Region}",
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "timezone_code"
+          },
+          "Label": "{i18n>Timezone}",
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "elevation"
+          },
+          "Label": "{i18n>Elevation}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "coordinates"
+          },
+          "Label": "{i18n>Coordinates}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "criticality"
+          },
+          "Label": "criticality",
+          "@UI.Importance": {
+            "#": "Low"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "country_code"
+          },
+          "Label": "{i18n>Country}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "latitude"
+          },
+          "Label": "{i18n>Latitude}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "longitude"
+          },
+          "Label": "{i18n>Longitude}"
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "state"
+          },
+          "Label": "{i18n>State}"
+        }
+      ],
+      "@UI.LineItem.@UI.Criticality": {
+        "=": "criticality"
+      },
+      "@UI.HeaderInfo.Title.$Type": "UI.DataField",
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "name"
+      },
+      "@UI.HeaderInfo.TypeName": "{i18n>Aerometrics}",
+      "@UI.HeaderInfo.TypeNamePlural": "",
+      "@UI.HeaderInfo.Description.$Type": "UI.DataField",
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "region"
+      },
+      "@UI.HeaderInfo.Initials": {
+        "=": "name"
+      },
+      "@UI.HeaderInfo.TypeImageUrl": "sap-icon://flight",
+      "@UI.SelectionFields": [
+        {
+          "=": "elevation"
+        },
+        {
+          "=": "name"
+        },
+        {
+          "=": "iataCode"
+        }
+      ],
+      "@UI.SelectionPresentationVariant#tableView.$Type": "UI.SelectionPresentationVariantType",
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.$Type": "UI.PresentationVariantType",
+      "@UI.SelectionPresentationVariant#tableView.PresentationVariant.Visualizations": [
+        "@UI.LineItem"
+      ],
+      "@UI.SelectionPresentationVariant#tableView.SelectionVariant.$Type": "UI.SelectionVariantType",
+      "@UI.SelectionPresentationVariant#tableView.SelectionVariant.SelectOptions": [],
+      "@UI.SelectionPresentationVariant#tableView.Text": "{i18n>AllCountries}",
+      "@UI.LineItem#tableView": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "icaoCode"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "iataCode"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "name"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "region"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "coordinates"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "timezone_code"
+          },
+          "@UI.Importance": {
+            "#": "Low"
+          }
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "com.aerometrics.db.schema.Airport"
+          ]
+        },
+        "columns": [
+          "*",
+          {
+            "xpr": [
+              {
+                "val": "["
+              },
+              "||",
+              {
+                "ref": [
+                  "latitude"
+                ]
+              },
+              "||",
+              {
+                "val": ", "
+              },
+              "||",
+              {
+                "ref": [
+                  "longitude"
+                ]
+              },
+              "||",
+              {
+                "val": "]"
+              }
+            ],
+            "as": "coordinates",
+            "cast": {
+              "type": "cds.String"
+            }
+          },
+          {
+            "xpr": [
+              {
+                "ref": [
+                  "country",
+                  "code"
+                ]
+              },
+              "||",
+              {
+                "val": "-"
+              },
+              "||",
+              {
+                "ref": [
+                  "state"
+                ]
+              }
+            ],
+            "as": "region",
+            "cast": {
+              "type": "cds.String"
+            }
+          },
+          {
+            "xpr": [
+              "case",
+              "when",
+              {
+                "ref": [
+                  "elevation"
+                ]
+              },
+              ">",
+              {
+                "val": 8000
+              },
+              "then",
+              {
+                "val": 1
+              },
+              "else",
+              {
+                "val": 0
+              },
+              "end"
+            ],
+            "as": "criticality",
+            "cast": {
+              "type": "cds.Integer"
+            }
+          }
+        ]
+      },
+      "elements": {
+        "icaoCode": {
+          "@Common.Label": "{i18n>IcaoCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "iataCode": {
+          "@Common.FieldControl": {
+            "#": "Optional"
+          },
+          "@Common.Label": "{i18n>IataCode}",
+          "type": "cds.String",
+          "length": 3
+        },
+        "name": {
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@Common.Label": "{i18n>Airport}",
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.CollectionPath": "Airports",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "name"
+              },
+              "ValueListProperty": "name"
+            },
+            {
+              "$Type": "Common.ValueListParameterDisplayOnly",
+              "ValueListProperty": "region"
+            }
+          ],
+          "@Common.ValueList.Label": "{i18n>Airport}",
+          "@Common.ValueListWithFixedValues": false,
+          "type": "cds.String"
+        },
+        "city": {
+          "@Common.FieldControl": {
+            "#": "Optional"
+          },
+          "@Common.Label": "{i18n>City}",
+          "type": "cds.String"
+        },
+        "state": {
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@Common.Label": "{i18n>State}",
+          "type": "cds.String"
+        },
+        "country": {
+          "doc": "Type for an association to Countries\n\nSee https://cap.cloud.sap/docs/cds/common#type-country",
+          "@Common.Text": {
+            "=": "country.name"
+          },
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.CollectionPath": "Countries",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "country_code"
+              },
+              "ValueListProperty": "code"
+            }
+          ],
+          "@Common.ValueList.Label": "{i18n>Country}",
+          "@Common.ValueListWithFixedValues": true,
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@title": "{i18n>Country}",
+          "@description": "{i18n>CountryCode.Description}",
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Countries",
+          "keys": [
+            {
+              "ref": [
+                "code"
+              ],
+              "$generatedFieldName": "country_code"
+            }
+          ],
+          "@Common.Label": "{i18n>Country}",
+          "@Core.Description": "{i18n>CountryCode.Description}",
+          "@Common.ValueList.viaAssociation": {
+            "=": "country"
+          }
+        },
+        "country_code": {
+          "type": "cds.String",
+          "length": 3,
+          "@odata.foreignKey4": "country",
+          "@Common.Text": {
+            "=": "country.name"
+          },
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.CollectionPath": "Countries",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "country_code"
+              },
+              "ValueListProperty": "code"
+            }
+          ],
+          "@Common.ValueList.Label": "{i18n>Country}",
+          "@Common.ValueListWithFixedValues": true,
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@title": "{i18n>Country}",
+          "@description": "{i18n>CountryCode.Description}",
+          "@Common.Label": "{i18n>Country}",
+          "@Core.Description": "{i18n>CountryCode.Description}"
+        },
+        "elevation": {
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@Common.Label": "{i18n>Elevation}",
+          "@Measures.Unit": "feet",
+          "type": "cds.Integer"
+        },
+        "avgElevation": {
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@Measures.Unit": "feet",
+          "@Common.Label": "avgElevation",
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 2
+        },
+        "latitude": {
+          "@Common.FieldControl": {
+            "#": "Optional"
+          },
+          "@Common.Label": "{i18n>Latitude}",
+          "type": "cds.Decimal",
+          "precision": 9,
+          "scale": 6
+        },
+        "longitude": {
+          "@Common.FieldControl": {
+            "#": "Optional"
+          },
+          "@Common.Label": "{i18n>Longitude}",
+          "type": "cds.Decimal",
+          "precision": 9,
+          "scale": 6
+        },
+        "coordinates": {
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@Common.Label": "{i18n>Coordinates}",
+          "@Core.Computed": true,
+          "type": "cds.String"
+        },
+        "timezone": {
+          "doc": "Type for an association to Timezones\n\nSee https://cap.cloud.sap/docs/cds/common#type-timezone",
+          "@Common.Text": {
+            "=": "timezone_code"
+          },
+          "@Common.Text.@UI.TextArrangement": {
+            "#": "TextOnly"
+          },
+          "@Common.Label": "{i18n>Timezone}",
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.CollectionPath": "Timezones",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "timezone_code"
+              },
+              "ValueListProperty": "code"
+            }
+          ],
+          "@Common.ValueList.Label": "{i18n>Timezone}",
+          "@Common.ValueListWithFixedValues": true,
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Timezones",
+          "keys": [
+            {
+              "ref": [
+                "code"
+              ],
+              "$generatedFieldName": "timezone_code"
+            }
+          ],
+          "@Common.ValueList.viaAssociation": {
+            "=": "timezone"
+          }
+        },
+        "timezone_code": {
+          "type": "cds.String",
+          "length": 100,
+          "@odata.foreignKey4": "timezone",
+          "@Common.Text": {
+            "=": "timezone_code"
+          },
+          "@Common.Text.@UI.TextArrangement": {
+            "#": "TextOnly"
+          },
+          "@Common.Label": "{i18n>Timezone}",
+          "@Common.FieldControl": {
+            "#": "Mandatory"
+          },
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.CollectionPath": "Timezones",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "timezone_code"
+              },
+              "ValueListProperty": "code"
+            }
+          ],
+          "@Common.ValueList.Label": "{i18n>Timezone}",
+          "@Common.ValueListWithFixedValues": true
+        },
+        "region": {
+          "@Common.FieldControl": {
+            "#": "ReadOnly"
+          },
+          "@Common.Label": "{i18n>Region}",
+          "@Core.Computed": true,
+          "type": "cds.String"
+        },
+        "criticality": {
+          "@UI.AdaptationHidden": true,
+          "@UI.HiddenFilter": true,
+          "@UI.Hidden": true,
+          "@Core.Computed": true,
+          "type": "cds.Integer"
+        },
+        "airportCount": {
+          "@Common.Label": "airportCount",
+          "@Core.Computed": true,
+          "virtual": true,
+          "type": "cds.Integer"
+        },
+        "IsActiveEntity": {
+          "type": "cds.Boolean",
+          "key": true,
+          "default": {
+            "val": true
+          },
+          "@UI.Hidden": true
+        },
+        "HasActiveEntity": {
+          "type": "cds.Boolean",
+          "default": {
+            "val": false
+          },
+          "notNull": true,
+          "@UI.Hidden": true
+        },
+        "HasDraftEntity": {
+          "type": "cds.Boolean",
+          "default": {
+            "val": false
+          },
+          "notNull": true,
+          "@UI.Hidden": true
+        },
+        "DraftAdministrativeData": {
+          "type": "cds.Association",
+          "target": "AeroMetricsService.DraftAdministrativeData",
+          "keys": [
+            {
+              "ref": [
+                "DraftUUID"
+              ],
+              "$generatedFieldName": "DraftAdministrativeData_DraftUUID"
+            }
+          ],
+          "cardinality": {
+            "max": 1
+          },
+          "@odata.contained": true,
+          "@UI.Hidden": true
+        },
+        "DraftAdministrativeData_DraftUUID": {
+          "type": "cds.UUID",
+          "@odata.foreignKey4": "DraftAdministrativeData",
+          "@odata.contained": true,
+          "@UI.Hidden": true
+        },
+        "SiblingEntity": {
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Airports",
+          "cardinality": {
+            "max": 1
+          },
+          "on": [
+            {
+              "ref": [
+                "SiblingEntity",
+                "icaoCode"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "icaoCode"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "SiblingEntity",
+                "IsActiveEntity"
+              ]
+            },
+            "!=",
+            {
+              "ref": [
+                "IsActiveEntity"
+              ]
+            }
+          ]
+        }
+      },
+      "actions": {
+        "draftPrepare": {
+          "kind": "action",
+          "returns": {
+            "type": "AeroMetricsService.Airports"
+          },
+          "params": {
+            "SideEffectsQualifier": {
+              "type": "cds.String"
+            }
+          }
+        },
+        "draftActivate": {
+          "kind": "action",
+          "returns": {
+            "type": "AeroMetricsService.Airports"
+          }
+        },
+        "draftEdit": {
+          "kind": "action",
+          "returns": {
+            "type": "AeroMetricsService.Airports"
+          },
+          "params": {
+            "PreserveChanges": {
+              "type": "cds.Boolean"
+            }
+          }
+        }
+      },
+      "@Common.DraftRoot.ActivationAction": "draftActivate",
+      "@Common.DraftRoot.EditAction": "draftEdit",
+      "@Common.DraftRoot.PreparationAction": "draftPrepare"
+    },
+    "Language": {
+      "kind": "type",
+      "doc": "Type for an association to Languages\n\nSee https://cap.cloud.sap/docs/cds/common#type-language",
+      "@title": "{i18n>Language}",
+      "@description": "{i18n>LanguageCode.Description}",
+      "type": "cds.Association",
+      "target": "sap.common.Languages",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ],
+      "@Common.Label": "{i18n>Language}",
+      "@Core.Description": "{i18n>LanguageCode.Description}"
+    },
+    "Currency": {
+      "kind": "type",
+      "doc": "Type for an association to Currencies\n\nSee https://cap.cloud.sap/docs/cds/common#type-currency",
+      "@title": "{i18n>Currency}",
+      "@description": "{i18n>CurrencyCode.Description}",
+      "type": "cds.Association",
+      "target": "sap.common.Currencies",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ],
+      "@Common.Label": "{i18n>Currency}",
+      "@Core.Description": "{i18n>CurrencyCode.Description}"
+    },
+    "Country": {
+      "kind": "type",
+      "doc": "Type for an association to Countries\n\nSee https://cap.cloud.sap/docs/cds/common#type-country",
+      "@title": "{i18n>Country}",
+      "@description": "{i18n>CountryCode.Description}",
+      "type": "cds.Association",
+      "target": "sap.common.Countries",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ],
+      "@Common.Label": "{i18n>Country}",
+      "@Core.Description": "{i18n>CountryCode.Description}"
+    },
+    "Timezone": {
+      "kind": "type",
+      "doc": "Type for an association to Timezones\n\nSee https://cap.cloud.sap/docs/cds/common#type-timezone",
+      "type": "cds.Association",
+      "target": "sap.common.Timezones",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ]
+    },
+    "sap.common": {
+      "kind": "context",
+      "doc": "Entities to serve the reuse types with extensible code lists\nincluding built-in support for value lists in Fiori."
+    },
+    "sap.common.Locale": {
+      "kind": "type",
+      "doc": "Type for a language code",
+      "@title": "{i18n>LanguageCode}",
+      "type": "cds.String",
+      "length": 14,
+      "@Common.Label": "{i18n>LanguageCode}"
+    },
+    "sap.common.Languages": {
+      "kind": "entity",
+      "doc": "Code list for languages\n\nSee https://cap.cloud.sap/docs/cds/common#entity-languages",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "doc": "Type for a language code",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Languages.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Languages.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      },
+      "$localized": true
+    },
+    "sap.common.Countries": {
+      "kind": "entity",
+      "doc": "Code list for countries\n\nSee https://cap.cloud.sap/docs/cds/common#entity-countries",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@title": "{i18n>CountryCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@Common.Label": "{i18n>CountryCode}"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Countries.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Countries.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      },
+      "$localized": true
+    },
+    "sap.common.Currencies": {
+      "kind": "entity",
+      "doc": "Code list for currencies\n\nSee https://cap.cloud.sap/docs/cds/common#entity-currencies",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@title": "{i18n>CurrencyCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@Common.Label": "{i18n>CurrencyCode}"
+        },
+        "symbol": {
+          "@title": "{i18n>CurrencySymbol}",
+          "type": "cds.String",
+          "length": 5,
+          "@Common.Label": "{i18n>CurrencySymbol}"
+        },
+        "minorUnit": {
+          "@title": "{i18n>CurrencyMinorUnit}",
+          "type": "cds.Int16",
+          "@Common.Label": "{i18n>CurrencyMinorUnit}"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Currencies.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Currencies.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      },
+      "$localized": true
+    },
+    "sap.common.Timezones": {
+      "kind": "entity",
+      "doc": "Code list for time zones\n\nSee https://cap.cloud.sap/docs/cds/common#entity-timezones",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@title": "{i18n>TimeZoneCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 100,
+          "@Common.Label": "{i18n>TimeZoneCode}"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Timezones.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Timezones.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      },
+      "$localized": true
+    },
+    "sap.common.CodeList": {
+      "kind": "aspect",
+      "doc": "Aspect for a code list with name and description\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-codelist",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        }
+      }
+    },
+    "sap.common.TextsAspect": {
+      "kind": "aspect",
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        }
+      }
+    },
+    "cuid": {
+      "kind": "aspect",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        }
+      }
+    },
+    "managed": {
+      "kind": "aspect",
+      "doc": "Aspect to capture changes by user and name\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-managed",
+      "elements": {
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp",
+          "@Core.Computed": true,
+          "@Common.Label": "{i18n>CreatedAt}"
+        },
+        "createdBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "cds.String",
+          "length": 255,
+          "@Core.Computed": true,
+          "@Common.Label": "{i18n>CreatedBy}",
+          "@Core.Description": "{i18n>UserID.Description}"
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp",
+          "@Core.Computed": true,
+          "@Common.Label": "{i18n>ChangedAt}"
+        },
+        "modifiedBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "cds.String",
+          "length": 255,
+          "@Core.Computed": true,
+          "@Common.Label": "{i18n>ChangedBy}",
+          "@Core.Description": "{i18n>UserID.Description}"
+        }
+      }
+    },
+    "temporal": {
+      "kind": "aspect",
+      "doc": "Aspect for entities with temporal data\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-temporal",
+      "elements": {
+        "validFrom": {
+          "@cds.valid.from": true,
+          "type": "cds.Timestamp"
+        },
+        "validTo": {
+          "@cds.valid.to": true,
+          "type": "cds.Timestamp"
+        }
+      }
+    },
+    "User": {
+      "kind": "type",
+      "doc": "Canonical user ID",
+      "@title": "{i18n>UserID}",
+      "@description": "{i18n>UserID.Description}",
+      "type": "cds.String",
+      "length": 255,
+      "@Common.Label": "{i18n>UserID}",
+      "@Core.Description": "{i18n>UserID.Description}"
+    },
+    "sap.common.Languages.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "doc": "Type for a language code",
+          "@odata.containment.ignore": true,
+          "@Common.Text": {
+            "=": "name"
+          },
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        }
+      }
+    },
+    "sap.common.Countries.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>CountryCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@Common.Label": "{i18n>CountryCode}"
+        }
+      }
+    },
+    "sap.common.Currencies.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>CurrencyCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@Common.Label": "{i18n>CurrencyCode}"
+        }
+      }
+    },
+    "sap.common.Timezones.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>TimeZoneCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 100,
+          "@Common.Label": "{i18n>TimeZoneCode}"
+        }
+      }
+    },
+    "AeroMetricsService.Timezones": {
+      "kind": "entity",
+      "doc": "Code list for time zones\n\nSee https://cap.cloud.sap/docs/cds/common#entity-timezones",
+      "@cds.autoexposed": true,
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "sap.common.Timezones"
+          ]
+        }
+      },
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@title": "{i18n>TimeZoneCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 100,
+          "@Common.Label": "{i18n>TimeZoneCode}"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "AeroMetricsService.Timezones.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Timezones.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      },
+      "$localized": true
+    },
+    "AeroMetricsService.Countries": {
+      "kind": "entity",
+      "doc": "Code list for countries\n\nSee https://cap.cloud.sap/docs/cds/common#entity-countries",
+      "@cds.autoexposed": true,
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "sap.common.Countries"
+          ]
+        }
+      },
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@title": "{i18n>CountryCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@Common.Label": "{i18n>CountryCode}"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "AeroMetricsService.Countries.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "AeroMetricsService.Countries.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      },
+      "$localized": true
+    },
+    "AeroMetricsService.Timezones.texts": {
+      "kind": "entity",
+      "@cds.autoexposed": true,
+      "@odata.draft.enabled": false,
+      "projection": {
+        "from": {
+          "ref": [
+            "sap.common.Timezones.texts"
+          ]
+        }
+      },
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>TimeZoneCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 100,
+          "@Common.Label": "{i18n>TimeZoneCode}"
+        }
+      }
+    },
+    "AeroMetricsService.Countries.texts": {
+      "kind": "entity",
+      "@cds.autoexposed": true,
+      "@odata.draft.enabled": false,
+      "projection": {
+        "from": {
+          "ref": [
+            "sap.common.Countries.texts"
+          ]
+        }
+      },
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 14,
+          "@Common.Label": "{i18n>LanguageCode}"
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255,
+          "@Common.Label": "{i18n>Name}"
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000,
+          "@Common.Label": "{i18n>Description}"
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>CountryCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@Common.Label": "{i18n>CountryCode}"
+        }
+      }
+    },
+    "DRAFT.DraftAdministrativeData": {
+      "kind": "entity",
+      "elements": {
+        "DraftUUID": {
+          "type": "cds.UUID",
+          "key": true,
+          "@UI.Hidden": true,
+          "@Common.Label": "{i18n>Draft_DraftUUID}"
+        },
+        "CreationDateTime": {
+          "type": "cds.Timestamp",
+          "@Common.Label": "{i18n>Draft_CreationDateTime}"
+        },
+        "CreatedByUser": {
+          "type": "cds.String",
+          "length": 256,
+          "@Common.Label": "{i18n>Draft_CreatedByUser}"
+        },
+        "DraftIsCreatedByMe": {
+          "type": "cds.Boolean",
+          "@UI.Hidden": true,
+          "@Common.Label": "{i18n>Draft_DraftIsCreatedByMe}"
+        },
+        "LastChangeDateTime": {
+          "type": "cds.Timestamp",
+          "@Common.Label": "{i18n>Draft_LastChangeDateTime}"
+        },
+        "LastChangedByUser": {
+          "type": "cds.String",
+          "length": 256,
+          "@Common.Label": "{i18n>Draft_LastChangedByUser}"
+        },
+        "InProcessByUser": {
+          "type": "cds.String",
+          "length": 256,
+          "@Common.Label": "{i18n>Draft_InProcessByUser}"
+        },
+        "DraftIsProcessedByMe": {
+          "type": "cds.Boolean",
+          "@UI.Hidden": true,
+          "@Common.Label": "{i18n>Draft_DraftIsProcessedByMe}"
+        }
+      },
+      "@Common.Label": "{i18n>Draft_DraftAdministrativeData}"
+    },
+    "AeroMetricsService.DraftAdministrativeData": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "DRAFT.DraftAdministrativeData"
+          ]
+        }
+      },
+      "elements": {
+        "DraftUUID": {
+          "type": "cds.UUID",
+          "key": true,
+          "@UI.Hidden": true,
+          "@Common.Label": "{i18n>Draft_DraftUUID}"
+        },
+        "CreationDateTime": {
+          "type": "cds.Timestamp",
+          "@Common.Label": "{i18n>Draft_CreationDateTime}"
+        },
+        "CreatedByUser": {
+          "type": "cds.String",
+          "length": 256,
+          "@Common.Label": "{i18n>Draft_CreatedByUser}"
+        },
+        "DraftIsCreatedByMe": {
+          "type": "cds.Boolean",
+          "@UI.Hidden": true,
+          "@Common.Label": "{i18n>Draft_DraftIsCreatedByMe}"
+        },
+        "LastChangeDateTime": {
+          "type": "cds.Timestamp",
+          "@Common.Label": "{i18n>Draft_LastChangeDateTime}"
+        },
+        "LastChangedByUser": {
+          "type": "cds.String",
+          "length": 256,
+          "@Common.Label": "{i18n>Draft_LastChangedByUser}"
+        },
+        "InProcessByUser": {
+          "type": "cds.String",
+          "length": 256,
+          "@Common.Label": "{i18n>Draft_InProcessByUser}"
+        },
+        "DraftIsProcessedByMe": {
+          "type": "cds.Boolean",
+          "@UI.Hidden": true,
+          "@Common.Label": "{i18n>Draft_DraftIsProcessedByMe}"
+        }
+      },
+      "@Common.Label": "{i18n>Draft_DraftAdministrativeData}"
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v5.1.2",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}

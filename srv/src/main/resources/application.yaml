@@ -1,0 +1,16 @@
+spring:
+  config.activate.on-profile: local-test
+  sql.init.schema-locations: classpath:schema-h2.sql
+  web.resources.static-locations: file:./app/
+cds:
+  data-source.auto-config.enabled: false
+  dataSource.csv.paths:
+  - app/airports/webapp/test/data/**
+
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.schema-locations: classpath:schema-h2.sql
+  web.resources.static-locations: file:./app/
+cds:
+  data-source.auto-config.enabled: false

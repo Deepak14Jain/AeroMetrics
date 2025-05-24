@@ -1,0 +1,25 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getGenericNodeFromPointer = getGenericNodeFromPointer;
+/**
+ *  Traverses the object tree and finds a node based on the pointer.
+ *
+ * @param root - Root of the object tree.
+ * @param pointer - Pointer pointing to a specific node.
+ * @returns A node.
+ */
+function getGenericNodeFromPointer(root, pointer) {
+    const segments = pointer.slice(1).split('/');
+    let node = root;
+    for (const segment of segments) {
+        const next = node[segment];
+        if (next) {
+            node = next;
+        }
+        else {
+            return undefined;
+        }
+    }
+    return node;
+}
+//# sourceMappingURL=pointer.js.map

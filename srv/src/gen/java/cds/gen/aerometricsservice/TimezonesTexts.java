@@ -1,0 +1,51 @@
+package cds.gen.aerometricsservice;
+
+import com.sap.cds.CdsData;
+import com.sap.cds.Struct;
+import com.sap.cds.ql.CdsName;
+import java.lang.String;
+import javax.annotation.processing.Generated;
+
+@CdsName("AeroMetricsService.Timezones.texts")
+@Generated(
+    value = "cds-maven-plugin",
+    date = "2025-05-24T03:34:37.697183Z",
+    comments = "com.sap.cds:cds-maven-plugin:3.2.0 / com.sap.cds:cds4j-api:3.2.0"
+)
+public interface TimezonesTexts extends CdsData {
+  String LOCALE = "locale";
+
+  String NAME = "name";
+
+  String DESCR = "descr";
+
+  String CODE = "code";
+
+  /**
+   * Type for a language code
+   */
+  String getLocale();
+
+  /**
+   * Type for a language code
+   */
+  void setLocale(String locale);
+
+  String getName();
+
+  void setName(String name);
+
+  String getDescr();
+
+  void setDescr(String descr);
+
+  String getCode();
+
+  void setCode(String code);
+
+  TimezonesTexts_ ref();
+
+  static TimezonesTexts create() {
+    return Struct.create(TimezonesTexts.class);
+  }
+}

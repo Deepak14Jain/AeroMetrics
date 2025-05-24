@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeEscapeSequences = removeEscapeSequences;
+const ESCAPE_MAPPINGS = {
+    '&apos;': "'",
+    '&gt;': '>',
+    '&lt;': '<',
+    '&amp;': '&',
+    '&quot;': '"'
+};
+/**
+ * Replaces XML escape sequences with their matching special characters.
+ *
+ * @param input text with escape sequences
+ * @returns text with special characters
+ */
+function removeEscapeSequences(input) {
+    return input.replace(/(&apos;|&lt;|&gt;|&amp;|&quot;)/g, (_str, item) => ESCAPE_MAPPINGS[item]);
+}
+//# sourceMappingURL=escaping.js.map

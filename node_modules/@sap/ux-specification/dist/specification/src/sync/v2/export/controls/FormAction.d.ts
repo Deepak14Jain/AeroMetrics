@@ -1,0 +1,18 @@
+import type { v2 } from '@sap/ux-specification-types';
+import type { ButtonType } from 'sap/m/library';
+import type { URI } from 'sap/ui/core/library';
+export declare class FormAction implements v2.FormAction {
+    visible: boolean;
+    tooltip?: string;
+    icon?: URI;
+    activeIcon?: URI;
+    type?: ButtonType;
+}
+export declare class FieldForAction implements v2.FormAction {
+    visible: boolean;
+    tooltip?: string;
+    icon?: URI;
+    activeIcon?: URI;
+    type?: ButtonType;
+}
+//# sourceMappingURL=FormAction.d.ts.map

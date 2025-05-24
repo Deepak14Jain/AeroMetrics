@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Measures.V1.xml">
+    <edmx:Include Alias="Measures" Namespace="Org.OData.Measures.V1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+    <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="AeroMetricsService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="TimeZoneAirportCount" EntityType="AeroMetricsService.TimeZoneAirportCount">
+          <NavigationPropertyBinding Path="timezone" Target="Timezones"/>
+        </EntitySet>
+        <EntitySet Name="AvgElevationPerCountry" EntityType="AeroMetricsService.AvgElevationPerCountry">
+          <NavigationPropertyBinding Path="country" Target="Countries"/>
+        </EntitySet>
+        <EntitySet Name="Airports" EntityType="AeroMetricsService.Airports">
+          <NavigationPropertyBinding Path="country" Target="Countries"/>
+          <NavigationPropertyBinding Path="timezone" Target="Timezones"/>
+          <NavigationPropertyBinding Path="SiblingEntity" Target="Airports"/>
+        </EntitySet>
+        <EntitySet Name="Timezones" EntityType="AeroMetricsService.Timezones">
+          <NavigationPropertyBinding Path="texts" Target="Timezones_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="Timezones_texts"/>
+        </EntitySet>
+        <EntitySet Name="Countries" EntityType="AeroMetricsService.Countries">
+          <NavigationPropertyBinding Path="texts" Target="Countries_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="Countries_texts"/>
+        </EntitySet>
+        <EntitySet Name="Timezones_texts" EntityType="AeroMetricsService.Timezones_texts"/>
+        <EntitySet Name="Countries_texts" EntityType="AeroMetricsService.Countries_texts"/>
+      </EntityContainer>
+      <EntityType Name="TimeZoneAirportCount">
+        <Key>
+          <PropertyRef Name="timezone_code"/>
+        </Key>
+        <NavigationProperty Name="timezone" Type="AeroMetricsService.Timezones">
+          <ReferentialConstraint Property="timezone_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="timezone_code" Type="Edm.String" MaxLength="100" Nullable="false"/>
+        <Property Name="airportCount" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="AvgElevationPerCountry">
+        <Key>
+          <PropertyRef Name="country_code"/>
+        </Key>
+        <NavigationProperty Name="country" Type="AeroMetricsService.Countries">
+          <ReferentialConstraint Property="country_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="country_code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+        <Property Name="avgElevation" Type="Edm.Decimal" Precision="10" Scale="2"/>
+      </EntityType>
+      <EntityType Name="Airports">
+        <Key>
+          <PropertyRef Name="icaoCode"/>
+          <PropertyRef Name="IsActiveEntity"/>
+        </Key>
+        <Property Name="icaoCode" Type="Edm.String" MaxLength="4" Nullable="false"/>
+        <Property Name="iataCode" Type="Edm.String" MaxLength="3"/>
+        <Property Name="name" Type="Edm.String"/>
+        <Property Name="city" Type="Edm.String"/>
+        <Property Name="state" Type="Edm.String"/>
+        <NavigationProperty Name="country" Type="AeroMetricsService.Countries">
+          <ReferentialConstraint Property="country_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="country_code" Type="Edm.String" MaxLength="3"/>
+        <Property Name="elevation" Type="Edm.Int32"/>
+        <Property Name="avgElevation" Type="Edm.Decimal" Precision="10" Scale="2"/>
+        <Property Name="latitude" Type="Edm.Decimal" Precision="9" Scale="6"/>
+        <Property Name="longitude" Type="Edm.Decimal" Precision="9" Scale="6"/>
+        <Property Name="coordinates" Type="Edm.String"/>
+        <NavigationProperty Name="timezone" Type="AeroMetricsService.Timezones">
+          <ReferentialConstraint Property="timezone_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="timezone_code" Type="Edm.String" MaxLength="100"/>
+        <Property Name="region" Type="Edm.String"/>
+        <Property Name="criticality" Type="Edm.Int32"/>
+        <Property Name="airportCount" Type="Edm.Int32"/>
+        <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+        <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+        <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+        <NavigationProperty Name="DraftAdministrativeData" Type="AeroMetricsService.DraftAdministrativeData" ContainsTarget="true"/>
+        <NavigationProperty Name="SiblingEntity" Type="AeroMetricsService.Airports"/>
+      </EntityType>
+      <EntityType Name="Timezones">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="100" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(AeroMetricsService.Timezones_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="AeroMetricsService.Timezones_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Countries">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(AeroMetricsService.Countries_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="AeroMetricsService.Countries_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="DraftAdministrativeData">
+        <Key>
+          <PropertyRef Name="DraftUUID"/>
+        </Key>
+        <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256"/>
+        <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+        <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256"/>
+        <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
+        <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+      </EntityType>
+      <EntityType Name="Timezones_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="100" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="Countries_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+      </EntityType>
+      <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="AeroMetricsService.Airports"/>
+        <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+        <ReturnType Type="AeroMetricsService.Airports"/>
+      </Action>
+      <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="AeroMetricsService.Airports"/>
+        <ReturnType Type="AeroMetricsService.Airports"/>
+      </Action>
+      <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="AeroMetricsService.Airports"/>
+        <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
+        <ReturnType Type="AeroMetricsService.Airports"/>
+      </Action>
+      <Annotations Target="AeroMetricsService.TimeZoneAirportCount">
+        <Annotation Term="UI.LineItem" Qualifier="tableView">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="timezone_code"/>
+              <PropertyValue Property="Label" String="{i18n>Timezone}"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="airportCount"/>
+              <PropertyValue Property="Label" String="Number of Airports"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+          <Record Type="UI.SelectionPresentationVariantType">
+            <PropertyValue Property="PresentationVariant">
+              <Record Type="UI.PresentationVariantType">
+                <PropertyValue Property="Visualizations">
+                  <Collection>
+                    <AnnotationPath>@UI.LineItem#tableView</AnnotationPath>
+                  </Collection>
+                </PropertyValue>
+                <PropertyValue Property="SortOrder">
+                  <Collection>
+                    <Record Type="Common.SortOrderType">
+                      <PropertyValue Property="Property" PropertyPath="airportCount"/>
+                      <PropertyValue Property="Descending" Bool="true"/>
+                    </Record>
+                  </Collection>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="SelectionVariant">
+              <Record Type="UI.SelectionVariantType">
+                <PropertyValue Property="SelectOptions">
+                  <Collection/>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Text" String="{i18n>MostCommonTimezones}"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.EntityContainer/TimeZoneAirportCount">
+        <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+          <Record Type="UI.SelectionPresentationVariantType">
+            <PropertyValue Property="PresentationVariant">
+              <Record Type="UI.PresentationVariantType">
+                <PropertyValue Property="Visualizations">
+                  <Collection>
+                    <AnnotationPath>@UI.LineItem#tableView</AnnotationPath>
+                  </Collection>
+                </PropertyValue>
+                <PropertyValue Property="SortOrder">
+                  <Collection>
+                    <Record Type="Common.SortOrderType">
+                      <PropertyValue Property="Property" PropertyPath="airportCount"/>
+                      <PropertyValue Property="Descending" Bool="true"/>
+                    </Record>
+                  </Collection>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="SelectionVariant">
+              <Record Type="UI.SelectionVariantType">
+                <PropertyValue Property="SelectOptions">
+                  <Collection/>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Text" String="{i18n>MostCommonTimezones}"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.TimeZoneAirportCount/timezone">
+        <Annotation Term="Core.Description" String="Type for an association to Timezones&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#type-timezone"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.TimeZoneAirportCount/timezone_code">
+        <Annotation Term="Common.Text" Path="timezone_code">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextOnly"/>
+        </Annotation>
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="Timezones"/>
+            <PropertyValue Property="CollectionPath" String="Timezones"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="timezone_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.TimeZoneAirportCount/airportCount">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="UI.AdaptationHidden" Bool="true"/>
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.AvgElevationPerCountry">
+        <Annotation Term="UI.LineItem" Qualifier="tableView">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="country/name"/>
+              <PropertyValue Property="Label" String="{i18n>Country}"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="avgElevation"/>
+              <PropertyValue Property="Label" String="{i18n>AverageElevation}"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+          <Record Type="UI.SelectionPresentationVariantType">
+            <PropertyValue Property="PresentationVariant">
+              <Record Type="UI.PresentationVariantType">
+                <PropertyValue Property="Visualizations">
+                  <Collection>
+                    <AnnotationPath>@UI.LineItem#tableView</AnnotationPath>
+                  </Collection>
+                </PropertyValue>
+                <PropertyValue Property="SortOrder">
+                  <Collection>
+                    <Record Type="Common.SortOrderType">
+                      <PropertyValue Property="Property" PropertyPath="avgElevation"/>
+                      <PropertyValue Property="Descending" Bool="true"/>
+                    </Record>
+                  </Collection>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="SelectionVariant">
+              <Record Type="UI.SelectionVariantType">
+                <PropertyValue Property="SelectOptions">
+                  <Collection/>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Text" String="Average Elevations"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.EntityContainer/AvgElevationPerCountry">
+        <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+          <Record Type="UI.SelectionPresentationVariantType">
+            <PropertyValue Property="PresentationVariant">
+              <Record Type="UI.PresentationVariantType">
+                <PropertyValue Property="Visualizations">
+                  <Collection>
+                    <AnnotationPath>@UI.LineItem#tableView</AnnotationPath>
+                  </Collection>
+                </PropertyValue>
+                <PropertyValue Property="SortOrder">
+                  <Collection>
+                    <Record Type="Common.SortOrderType">
+                      <PropertyValue Property="Property" PropertyPath="avgElevation"/>
+                      <PropertyValue Property="Descending" Bool="true"/>
+                    </Record>
+                  </Collection>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="SelectionVariant">
+              <Record Type="UI.SelectionVariantType">
+                <PropertyValue Property="SelectOptions">
+                  <Collection/>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Text" String="Average Elevations"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.AvgElevationPerCountry/country">
+        <Annotation Term="Common.Label" String="{i18n>Country}"/>
+        <Annotation Term="Core.Description" String="{i18n>CountryCode.Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.AvgElevationPerCountry/country_code">
+        <Annotation Term="Common.Text" Path="country/name"/>
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="Common.Label" String="{i18n>Country}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>Country}"/>
+            <PropertyValue Property="CollectionPath" String="Countries"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="country_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Core.Description" String="{i18n>CountryCode.Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.AvgElevationPerCountry/avgElevation">
+        <Annotation Term="Measures.Unit" String="feet"/>
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="UI.AdaptationHidden" Bool="true"/>
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports">
+        <Annotation Term="UI.FieldGroup" Qualifier="GeneratedGroup">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>IcaoCode}"/>
+                  <PropertyValue Property="Value" Path="icaoCode"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>IataCode}"/>
+                  <PropertyValue Property="Value" Path="iataCode"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>Airport}"/>
+                  <PropertyValue Property="Value" Path="name"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>City}"/>
+                  <PropertyValue Property="Value" Path="city"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>State}"/>
+                  <PropertyValue Property="Value" Path="state"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>Country}"/>
+                  <PropertyValue Property="Value" Path="country_code"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>Elevation}"/>
+                  <PropertyValue Property="Value" Path="elevation"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>Latitude}"/>
+                  <PropertyValue Property="Value" Path="latitude"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>Longitude}"/>
+                  <PropertyValue Property="Value" Path="longitude"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Label" String="{i18n>Timezone}"/>
+                  <PropertyValue Property="Value" Path="timezone_code"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.Facets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="ID" String="GeneratedFacet1"/>
+              <PropertyValue Property="Label" String="General Information"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#GeneratedGroup"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="{i18n>Airport}"/>
+              <PropertyValue Property="Value" Path="name"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="{i18n>IcaoCode}"/>
+              <PropertyValue Property="Value" Path="icaoCode"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="{i18n>IataCode}"/>
+              <PropertyValue Property="Value" Path="iataCode"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="{i18n>City}"/>
+              <PropertyValue Property="Value" Path="city"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="region"/>
+              <PropertyValue Property="Label" String="{i18n>Region}"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="timezone_code"/>
+              <PropertyValue Property="Label" String="{i18n>Timezone}"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="elevation"/>
+              <PropertyValue Property="Label" String="{i18n>Elevation}"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="coordinates"/>
+              <PropertyValue Property="Label" String="{i18n>Coordinates}"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="criticality"/>
+              <PropertyValue Property="Label" String="criticality"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Low"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="country_code"/>
+              <PropertyValue Property="Label" String="{i18n>Country}"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="latitude"/>
+              <PropertyValue Property="Label" String="{i18n>Latitude}"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="longitude"/>
+              <PropertyValue Property="Label" String="{i18n>Longitude}"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="state"/>
+              <PropertyValue Property="Label" String="{i18n>State}"/>
+            </Record>
+          </Collection>
+          <Annotation Term="UI.Criticality" Path="criticality"/>
+        </Annotation>
+        <Annotation Term="UI.HeaderInfo">
+          <Record Type="UI.HeaderInfoType">
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="name"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="TypeName" String="{i18n>Aerometrics}"/>
+            <PropertyValue Property="TypeNamePlural" String=""/>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="region"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Initials" Path="name"/>
+            <PropertyValue Property="TypeImageUrl" String="sap-icon://flight"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.SelectionFields">
+          <Collection>
+            <PropertyPath>elevation</PropertyPath>
+            <PropertyPath>name</PropertyPath>
+            <PropertyPath>iataCode</PropertyPath>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+          <Record Type="UI.SelectionPresentationVariantType">
+            <PropertyValue Property="PresentationVariant">
+              <Record Type="UI.PresentationVariantType">
+                <PropertyValue Property="Visualizations">
+                  <Collection>
+                    <AnnotationPath>@UI.LineItem</AnnotationPath>
+                  </Collection>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="SelectionVariant">
+              <Record Type="UI.SelectionVariantType">
+                <PropertyValue Property="SelectOptions">
+                  <Collection/>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Text" String="{i18n>AllCountries}"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.LineItem" Qualifier="tableView">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="icaoCode"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="iataCode"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="region"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="coordinates"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="timezone_code"/>
+              <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Low"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.EntityContainer/Airports">
+        <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+          <Record Type="UI.SelectionPresentationVariantType">
+            <PropertyValue Property="PresentationVariant">
+              <Record Type="UI.PresentationVariantType">
+                <PropertyValue Property="Visualizations">
+                  <Collection>
+                    <AnnotationPath>@UI.LineItem</AnnotationPath>
+                  </Collection>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="SelectionVariant">
+              <Record Type="UI.SelectionVariantType">
+                <PropertyValue Property="SelectOptions">
+                  <Collection/>
+                </PropertyValue>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Text" String="{i18n>AllCountries}"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Common.DraftRoot">
+          <Record Type="Common.DraftRootType">
+            <PropertyValue Property="ActivationAction" String="AeroMetricsService.draftActivate"/>
+            <PropertyValue Property="EditAction" String="AeroMetricsService.draftEdit"/>
+            <PropertyValue Property="PreparationAction" String="AeroMetricsService.draftPrepare"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/icaoCode">
+        <Annotation Term="Common.Label" String="{i18n>IcaoCode}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/iataCode">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+        <Annotation Term="Common.Label" String="{i18n>IataCode}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/name">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+        <Annotation Term="Common.Label" String="{i18n>Airport}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="CollectionPath" String="Airports"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="name"/>
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="region"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="Label" String="{i18n>Airport}"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="false"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/city">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+        <Annotation Term="Common.Label" String="{i18n>City}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/state">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+        <Annotation Term="Common.Label" String="{i18n>State}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/country">
+        <Annotation Term="Common.Label" String="{i18n>Country}"/>
+        <Annotation Term="Core.Description" String="{i18n>CountryCode.Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/country_code">
+        <Annotation Term="Common.Text" Path="country/name"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="CollectionPath" String="Countries"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="country_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="Label" String="{i18n>Country}"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+        <Annotation Term="Common.Label" String="{i18n>Country}"/>
+        <Annotation Term="Core.Description" String="{i18n>CountryCode.Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/elevation">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+        <Annotation Term="Common.Label" String="{i18n>Elevation}"/>
+        <Annotation Term="Measures.Unit" String="feet"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/avgElevation">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="Common.Label" String="avgElevation"/>
+        <Annotation Term="Measures.Unit" String="feet"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/latitude">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+        <Annotation Term="Common.Label" String="{i18n>Latitude}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/longitude">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+        <Annotation Term="Common.Label" String="{i18n>Longitude}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/coordinates">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="Common.Label" String="{i18n>Coordinates}"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/timezone">
+        <Annotation Term="Common.Label" String="{i18n>Timezone}"/>
+        <Annotation Term="Core.Description" String="Type for an association to Timezones&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#type-timezone"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/timezone_code">
+        <Annotation Term="Common.Text" Path="timezone_code">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextOnly"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Timezone}"/>
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="CollectionPath" String="Timezones"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="timezone_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="Label" String="{i18n>Timezone}"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/region">
+        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+        <Annotation Term="Common.Label" String="{i18n>Region}"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/criticality">
+        <Annotation Term="UI.AdaptationHidden" Bool="true"/>
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/airportCount">
+        <Annotation Term="Common.Label" String="airportCount"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/IsActiveEntity">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/HasActiveEntity">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/HasDraftEntity">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Airports/DraftAdministrativeData">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Core.Description" String="Code list for time zones&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#entity-timezones"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones/code">
+        <Annotation Term="Common.Label" String="{i18n>TimeZoneCode}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Core.Description" String="Code list for countries&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#entity-countries"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries/code">
+        <Annotation Term="Common.Text" Path="name"/>
+        <Annotation Term="Common.Label" String="{i18n>CountryCode}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData">
+        <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/DraftUUID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Draft_DraftUUID}"/>
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/CreationDateTime">
+        <Annotation Term="Common.Label" String="{i18n>Draft_CreationDateTime}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/CreatedByUser">
+        <Annotation Term="Common.Label" String="{i18n>Draft_CreatedByUser}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/DraftIsCreatedByMe">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsCreatedByMe}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/LastChangeDateTime">
+        <Annotation Term="Common.Label" String="{i18n>Draft_LastChangeDateTime}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/LastChangedByUser">
+        <Annotation Term="Common.Label" String="{i18n>Draft_LastChangedByUser}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/InProcessByUser">
+        <Annotation Term="Common.Label" String="{i18n>Draft_InProcessByUser}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.DraftAdministrativeData/DraftIsProcessedByMe">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Timezones_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>TimeZoneCode}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="AeroMetricsService.Countries_texts/code">
+        <Annotation Term="Common.Text" Path="name"/>
+        <Annotation Term="Common.Label" String="{i18n>CountryCode}"/>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

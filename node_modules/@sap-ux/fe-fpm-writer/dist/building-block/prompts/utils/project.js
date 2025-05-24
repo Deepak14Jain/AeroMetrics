@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isCapProject = isCapProject;
+/**
+ * Method checks if passed project is CAP project.
+ *
+ * @param project Project to check
+ * @returns true if passed project is CAP project
+ */
+function isCapProject(project) {
+    return ['CAPJava', 'CAPNodejs'].includes(project.projectType);
+}
+//# sourceMappingURL=project.js.map

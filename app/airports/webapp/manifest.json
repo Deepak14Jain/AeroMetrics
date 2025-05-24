@@ -1,0 +1,278 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "com.aerometrics.app.airports",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.15.0",
+      "toolsId": "995c5e7f-1b90-4651-8311-eeddf62d1532"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/AeroMetricsService/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.134.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.aerometrics.app.airports.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "AirportsList",
+          "target": "AirportsList"
+        },
+        {
+          "pattern": "Airports({key}):?query:",
+          "name": "AirportsObjectPage",
+          "target": "AirportsObjectPage"
+        }
+      ],
+      "targets": {
+        "AirportsList": {
+          "type": "Component",
+          "id": "AirportsList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Airports",
+              "variantManagement": "Page",
+              "navigation": {
+                "Airports": {
+                  "detail": {
+                    "route": "AirportsObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable",
+                    "personalization": {
+                      "column": true,
+                      "sort": true,
+                      "filter": true
+                    },
+                    "enableExport": true,
+                    "widthIncludingColumnHeader": true,
+                    "selectAll": true,
+                    "quickVariantSelection": {
+                      "showCounts": true,
+                      "hideTableTitle": false
+                    },
+                    "selectionMode": "Multi"
+                  },
+                  "columns": {
+                    "DataField::elevation": {
+                      "availability": "Adaptation"
+                    },
+                    "DataField::coordinates": {
+                      "availability": "Adaptation"
+                    },
+                    "DataField::criticality": {
+                      "availability": "Hidden"
+                    },
+                    "DataField::country_code": {
+                      "availability": "Adaptation"
+                    },
+                    "DataField::latitude": {
+                      "availability": "Adaptation"
+                    },
+                    "DataField::longitude": {
+                      "availability": "Adaptation"
+                    },
+                    "DataField::state": {
+                      "availability": "Adaptation"
+                    }
+                  }
+                },
+                "/AvgElevationPerCountry/@com.sap.vocabularies.UI.v1.LineItem#tableView1": {
+                  "columns": {
+                    "DataField::avgElevation": {
+                      "availability": "Default"
+                    },
+                    "DataField::country_code": {
+                      "availability": "Default"
+                    }
+                  }
+                },
+                "/TimeZoneAirportCount/@com.sap.vocabularies.UI.v1.LineItem#tableView": {
+                  "columns": {
+                    "DataField::timezone_code": {
+                      "availability": "Default",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::airportCount": {
+                      "availability": "Default",
+                      "widthIncludingColumnHeader": true
+                    }
+                  },
+                  "tableSettings": {
+                    "disableCopyToClipboard": false,
+                    "enableExport": true,
+                    "selectAll": true,
+                    "selectionMode": "Multi",
+                    "type": "ResponsiveTable",
+                    "widthIncludingColumnHeader": true,
+                    "personalization": {
+                      "column": false,
+                      "filter": false,
+                      "sort": false
+                    },
+                    "quickVariantSelection": {
+                      "hideTableTitle": false,
+                      "showCounts": true
+                    }
+                  }
+                },
+                "/AvgElevationPerCountry/@com.sap.vocabularies.UI.v1.LineItem#tableView2": {
+                  "columns": {
+                    "DataField::avgElevation": {
+                      "availability": "Default",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::country_code": {
+                      "availability": "Default",
+                      "widthIncludingColumnHeader": true
+                    }
+                  }
+                },
+                "/AvgElevationPerCountry/@com.sap.vocabularies.UI.v1.LineItem#tableView": {
+                  "tableSettings": {
+                    "disableCopyToClipboard": false,
+                    "enableExport": true,
+                    "type": "ResponsiveTable",
+                    "widthIncludingColumnHeader": true,
+                    "personalization": {
+                      "column": false,
+                      "filter": false,
+                      "sort": false
+                    },
+                    "quickVariantSelection": {
+                      "hideTableTitle": false,
+                      "showCounts": true
+                    }
+                  }
+                }
+              },
+              "defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView",
+              "views": {
+                "paths": [
+                  {
+                    "key": "AllCountries",
+                    "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView",
+                    "visible": true,
+                    "keepPreviousPersonalization": false
+                  },
+                  {
+                    "key": "MostCommonTimeZones",
+                    "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView",
+                    "entitySet": "TimeZoneAirportCount",
+                    "keepPreviousPersonalization": false,
+                    "visible": true
+                  },
+                  {
+                    "key": "AverageElevations",
+                    "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView",
+                    "entitySet": "AvgElevationPerCountry",
+                    "keepPreviousPersonalization": false,
+                    "visible": true
+                  }
+                ],
+                "showCounts": true
+              },
+              "initialLoad": "Enabled"
+            }
+          }
+        },
+        "AirportsObjectPage": {
+          "type": "Component",
+          "id": "AirportsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Airports",
+              "content": {
+                "header": {
+                  "anchorBarVisible": true,
+                  "visible": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}

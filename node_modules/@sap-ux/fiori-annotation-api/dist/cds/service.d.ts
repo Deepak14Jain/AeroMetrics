@@ -1,0 +1,12 @@
+import type { CDSService } from '../types';
+/**
+ * Creates CDS service structure.
+ *
+ * @param projectRoot - Absolute path of the project.
+ * @param serviceName - Name of the CDS service.
+ * @param fileCache - Files from memfs.
+ * @param clearCache - Flag indicating if the CDS file resolution cache should be cleared.
+ * @returns CDS service structure.
+ */
+export declare function getCDSService(projectRoot: string, serviceName: string, fileCache: Map<string, string>, clearCache?: boolean): Promise<CDSService>;
+//# sourceMappingURL=service.d.ts.map

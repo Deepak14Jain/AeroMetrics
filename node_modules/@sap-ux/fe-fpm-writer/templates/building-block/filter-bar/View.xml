@@ -1,0 +1,10 @@
+<<%- macrosNamespace %>:FilterBar
+    id="<%- data.id %>"<% if (data.metaPath) { %>
+    metaPath="<%- data.metaPath %>"<% } %><% if (data.contextPath) { %>
+    contextPath="<%- data.contextPath %>"<% } %><% if (data.search) { %>
+    search="<%- data.search %>"<% } %><% if (data.filterChanged) { %>
+    filterChanged="<%- data.filterChanged %>"<% } %><% if (data.liveMode !== undefined) { %>
+    liveMode="<%- data.liveMode %>"<% } %><% if (data.showClearButton !== undefined) { %>
+    showClearButton="<%- data.showClearButton %>"<% } %><% if (data.showMessages !== undefined) { %>
+    showMessages="<%- data.showMessages %>"<% } %>
+/>

@@ -1,0 +1,22 @@
+import type { XsnCompileModel } from '@sap/cds-compiler-types';
+import type { AnnotationFile } from '@sap-ux/odata-annotation-core';
+export interface PropagatedTargetMap {
+    [sourceTarget: string]: {
+        [target: string]: boolean;
+    };
+}
+/**
+ * Function generates a map of propagated targets (per file), i.e.
+ * original target => list of targets to which original annotations are propagated
+ * The map is used to build ghost files with propagated annotations
+ * @param ast - XSN compile model
+ * @param serviceName - name of service for which API was instantiated (API use case)
+ *      used to limit propagation data by the scope which is relevant for API consumers
+ * @param files - array of source files in generic format (LSP use case)
+ */
+export declare const toPropagatedTargetMap: (ast: XsnCompileModel, serviceName?: string, files?: AnnotationFile[]) => {
+    propagationMap: PropagatedTargetMap;
+    sourceUris: Set<string>;
+};
+export declare function buildGhostFiles(ast: XsnCompileModel, files: AnnotationFile[]): AnnotationFile[];
+//# sourceMappingURL=ghostFiles.d.ts.map

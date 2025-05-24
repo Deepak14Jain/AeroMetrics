@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+<servers>
+      <server>
+         <id>artifactory.build.releases</id>
+         <username>${env.ENV_ARTIFACTORY_USERNAME}</username>
+         <password>${env.ENV_ARTIFACTORY_PASSWORD}</password>
+      </server>
+      <server>
+         <id>artifactory.build.snapshots</id>
+         <username>${env.ENV_ARTIFACTORY_USERNAME}</username>
+         <password>${env.ENV_ARTIFACTORY_PASSWORD}</password>
+      </server>
+      <server>
+         <id>artifactory.build.milestones</id>
+         <username>${env.ENV_ARTIFACTORY_USERNAME}</username>
+         <password>${env.ENV_ARTIFACTORY_PASSWORD}</password>
+      </server>
+      <server>
+         <id>artifactory.eureka-maven-nexus-public-proxy</id>
+         <username>${env.ENV_ARTIFACTORY_USERNAME}</username>
+         <password>${env.ENV_ARTIFACTORY_PASSWORD}</password>
+      </server>
+    </servers>
+</settings>

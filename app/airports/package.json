@@ -1,0 +1,29 @@
+{
+  "name": "airports",
+  "version": "0.0.1",
+  "description": "Global Airport Data",
+  "keywords": [
+    "ui5",
+    "openui5",
+    "sapui5"
+  ],
+  "main": "webapp/index.html",
+  "devDependencies": {
+    "@sap/ux-ui5-tooling": "1",
+    "@ui5/cli": "^3.0.0",
+    "grunt": "^1.6.1",
+    "grunt-karma": "^4.0.2",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-html-reporter": "^0.2.7",
+    "karma-junit-reporter": "^2.0.1",
+    "karma-qunit": "^4.2.1",
+    "karma-ui5": "^4.1.0"
+  },
+  "scripts": {
+    "deploy-config": "npx -p @sap/ux-ui5-tooling fiori add deploy-config cf",
+    "mock-server": "cd ../../ && cd ./srv && mvn -s ../settings.xml clean spring-boot:run -U -Dspring-boot.run.jvmArguments=\"-Dspring.profiles.active=default\"",
+    "test-server": "cd ../../ && cd ./srv && mvn -s ../settings.xml clean spring-boot:run -U -Dspring-boot.run.jvmArguments=\"-Dspring.profiles.active=local-test\"",
+    "test-opa": "grunt opa_tests --appName=airports --testCompiled=false --debugMode=true"
+  }
+}

@@ -1,0 +1,4 @@
+import type { CSDL } from '@sap-ux/vocabularies/CSDL';
+declare const _default: CSDL;
+export default _default;
+//# sourceMappingURL=com.sap.vocabularies.PDF.v1.d.ts.map

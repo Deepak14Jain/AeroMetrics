@@ -1,0 +1,3 @@
+srv/src/main/resources/edmx/_i18n/i18n.json
+srv/src/main/resources/edmx/csn.json
+srv/src/main/resources/edmx/odata/v4/AeroMetricsService.xml

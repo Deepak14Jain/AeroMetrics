@@ -1,0 +1,34 @@
+import type { Editor } from 'mem-fs-editor';
+import type { Manifest } from './types';
+/**
+ * Validate that the UI5 version requirement is valid.
+ *
+ * @param ui5Version - optional minimum required UI5 version
+ * @returns true if the version is supported otherwise throws an error
+ */
+export declare function validateVersion(ui5Version?: string): boolean;
+/**
+ * Validates the library dependencies - at least one of expected dependencies is present.
+ *
+ * @param {string} manifest - the manifest content
+ * @param {string[]} dependencies - expected dependencies
+ * @returns true if at least one of expected dependencies is presented in manifest.
+ */
+export declare function validateDependenciesLibs(manifest: Manifest, dependencies: string[]): boolean;
+/**
+ * Validates the provided base path, checks at least one of expected dependencies is present.
+ *
+ * @param {string} basePath - the base path
+ * @param {Editor} fs - the memfs editor instance
+ * @param {string[]} dependencies - expected dependencies
+ * @returns true if the path is valid, otherwise, throws and error
+ */
+export declare function validateBasePath(basePath: string, fs?: Editor, dependencies?: string[]): Promise<boolean>;
+/**
+ * Returns the message property if the error is an instance of `Error` else a string representation of the error.
+ *
+ * @param error {Error | unknown} - the error instance
+ * @returns {string} the error message
+ */
+export declare function getErrorMessage(error: Error | unknown): string;
+//# sourceMappingURL=validate.d.ts.map

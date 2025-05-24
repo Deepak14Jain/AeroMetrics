@@ -1,0 +1,250 @@
+code,name,descr
+AW,Aruba,Aruba
+AF,Afghanistan,Afghanistan
+AO,Angola,Angola
+AI,Anguilla,Anguilla
+AX,Åland Islands,Åland Islands
+AL,Albania,Albania
+AD,Andorra,Andorra
+AE,United Arab Emirates,United Arab Emirates
+AR,Argentina,Argentina
+AM,Armenia,Armenia
+AS,American Samoa,American Samoa
+AQ,Antarctica,Antarctica
+TF,French Southern Territories,French Southern Territories
+AG,Antigua and Barbuda,Antigua and Barbuda
+AU,Australia,Australia
+AT,Austria,Austria
+AZ,Azerbaijan,Azerbaijan
+BI,Burundi,Burundi
+BE,Belgium,Belgium
+BJ,Benin,Benin
+BQ,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba"
+BF,Burkina Faso,Burkina Faso
+BD,Bangladesh,Bangladesh
+BG,Bulgaria,Bulgaria
+BH,Bahrain,Bahrain
+BS,Bahamas,Bahamas
+BA,Bosnia and Herzegovina,Bosnia and Herzegovina
+BL,Saint Barthélemy,Saint Barthélemy
+BY,Belarus,Belarus
+BZ,Belize,Belize
+BM,Bermuda,Bermuda
+BO,"Bolivia, Plurinational State of","Bolivia, Plurinational State of"
+BR,Brazil,Brazil
+BB,Barbados,Barbados
+BN,Brunei Darussalam,Brunei Darussalam
+BT,Bhutan,Bhutan
+BV,Bouvet Island,Bouvet Island
+BW,Botswana,Botswana
+CF,Central African Republic,Central African Republic
+CA,Canada,Canada
+CC,Cocos (Keeling) Islands,Cocos (Keeling) Islands
+CH,Switzerland,Switzerland
+CL,Chile,Chile
+CN,China,China
+CI,Côte d'Ivoire,Côte d'Ivoire
+CM,Cameroon,Cameroon
+CD,"Congo, The Democratic Republic of the","Congo, The Democratic Republic of the"
+CG,Congo,Congo
+CK,Cook Islands,Cook Islands
+CO,Colombia,Colombia
+KM,Comoros,Comoros
+CV,Cabo Verde,Cabo Verde
+CR,Costa Rica,Costa Rica
+CU,Cuba,Cuba
+CW,Curaçao,Curaçao
+CX,Christmas Island,Christmas Island
+KY,Cayman Islands,Cayman Islands
+CY,Cyprus,Cyprus
+CZ,Czechia,Czechia
+DE,Germany,Germany
+DJ,Djibouti,Djibouti
+DM,Dominica,Dominica
+DK,Denmark,Denmark
+DO,Dominican Republic,Dominican Republic
+DZ,Algeria,Algeria
+EC,Ecuador,Ecuador
+EG,Egypt,Egypt
+ER,Eritrea,Eritrea
+EH,Western Sahara,Western Sahara
+ES,Spain,Spain
+EE,Estonia,Estonia
+ET,Ethiopia,Ethiopia
+FI,Finland,Finland
+FJ,Fiji,Fiji
+FK,Falkland Islands (Malvinas),Falkland Islands (Malvinas)
+FR,France,France
+FO,Faroe Islands,Faroe Islands
+FM,"Micronesia, Federated States of","Micronesia, Federated States of"
+GA,Gabon,Gabon
+GB,United Kingdom,United Kingdom
+GE,Georgia,Georgia
+GG,Guernsey,Guernsey
+GH,Ghana,Ghana
+GI,Gibraltar,Gibraltar
+GN,Guinea,Guinea
+GP,Guadeloupe,Guadeloupe
+GM,Gambia,Gambia
+GW,Guinea-Bissau,Guinea-Bissau
+GQ,Equatorial Guinea,Equatorial Guinea
+GR,Greece,Greece
+GD,Grenada,Grenada
+GL,Greenland,Greenland
+GT,Guatemala,Guatemala
+GF,French Guiana,French Guiana
+GU,Guam,Guam
+GY,Guyana,Guyana
+HK,Hong Kong,Hong Kong
+HM,Heard Island and McDonald Islands,Heard Island and McDonald Islands
+HN,Honduras,Honduras
+HR,Croatia,Croatia
+HT,Haiti,Haiti
+HU,Hungary,Hungary
+ID,Indonesia,Indonesia
+IM,Isle of Man,Isle of Man
+IN,India,India
+IO,British Indian Ocean Territory,British Indian Ocean Territory
+IE,Ireland,Ireland
+IR,"Iran, Islamic Republic of","Iran, Islamic Republic of"
+IQ,Iraq,Iraq
+IS,Iceland,Iceland
+IL,Israel,Israel
+IT,Italy,Italy
+JM,Jamaica,Jamaica
+JE,Jersey,Jersey
+JO,Jordan,Jordan
+JP,Japan,Japan
+KZ,Kazakhstan,Kazakhstan
+KE,Kenya,Kenya
+KG,Kyrgyzstan,Kyrgyzstan
+KH,Cambodia,Cambodia
+KI,Kiribati,Kiribati
+KN,Saint Kitts and Nevis,Saint Kitts and Nevis
+KR,"Korea, Republic of","Korea, Republic of"
+KW,Kuwait,Kuwait
+LA,Lao People's Democratic Republic,Lao People's Democratic Republic
+LB,Lebanon,Lebanon
+LR,Liberia,Liberia
+LY,Libya,Libya
+LC,Saint Lucia,Saint Lucia
+LI,Liechtenstein,Liechtenstein
+LK,Sri Lanka,Sri Lanka
+LS,Lesotho,Lesotho
+LT,Lithuania,Lithuania
+LU,Luxembourg,Luxembourg
+LV,Latvia,Latvia
+MO,Macao,Macao
+MF,Saint Martin (French part),Saint Martin (French part)
+MA,Morocco,Morocco
+MC,Monaco,Monaco
+MD,"Moldova, Republic of","Moldova, Republic of"
+MG,Madagascar,Madagascar
+MV,Maldives,Maldives
+MX,Mexico,Mexico
+MH,Marshall Islands,Marshall Islands
+MK,North Macedonia,North Macedonia
+ML,Mali,Mali
+MT,Malta,Malta
+MM,Myanmar,Myanmar
+ME,Montenegro,Montenegro
+MN,Mongolia,Mongolia
+MP,Northern Mariana Islands,Northern Mariana Islands
+MZ,Mozambique,Mozambique
+MR,Mauritania,Mauritania
+MS,Montserrat,Montserrat
+MQ,Martinique,Martinique
+MU,Mauritius,Mauritius
+MW,Malawi,Malawi
+MY,Malaysia,Malaysia
+YT,Mayotte,Mayotte
+NA,Namibia,Namibia
+NC,New Caledonia,New Caledonia
+NE,Niger,Niger
+NF,Norfolk Island,Norfolk Island
+NG,Nigeria,Nigeria
+NI,Nicaragua,Nicaragua
+NU,Niue,Niue
+NL,Netherlands,Netherlands
+NO,Norway,Norway
+NP,Nepal,Nepal
+NR,Nauru,Nauru
+NZ,New Zealand,New Zealand
+OM,Oman,Oman
+PK,Pakistan,Pakistan
+PA,Panama,Panama
+PN,Pitcairn,Pitcairn
+PE,Peru,Peru
+PH,Philippines,Philippines
+PW,Palau,Palau
+PG,Papua New Guinea,Papua New Guinea
+PL,Poland,Poland
+PR,Puerto Rico,Puerto Rico
+KP,"Korea, Democratic People's Republic of","Korea, Democratic People's Republic of"
+PT,Portugal,Portugal
+PY,Paraguay,Paraguay
+PS,"Palestine, State of","Palestine, State of"
+PF,French Polynesia,French Polynesia
+QA,Qatar,Qatar
+RE,Réunion,Réunion
+RO,Romania,Romania
+RU,Russian Federation,Russian Federation
+RW,Rwanda,Rwanda
+SA,Saudi Arabia,Saudi Arabia
+SD,Sudan,Sudan
+SN,Senegal,Senegal
+SG,Singapore,Singapore
+GS,South Georgia and the South Sandwich Islands,South Georgia and the South Sandwich Islands
+SH,"Saint Helena, Ascension and Tristan da Cunha","Saint Helena, Ascension and Tristan da Cunha"
+SJ,Svalbard and Jan Mayen,Svalbard and Jan Mayen
+SB,Solomon Islands,Solomon Islands
+SL,Sierra Leone,Sierra Leone
+SV,El Salvador,El Salvador
+SM,San Marino,San Marino
+SO,Somalia,Somalia
+PM,Saint Pierre and Miquelon,Saint Pierre and Miquelon
+RS,Serbia,Serbia
+SS,South Sudan,South Sudan
+ST,Sao Tome and Principe,Sao Tome and Principe
+SR,Suriname,Suriname
+SK,Slovakia,Slovakia
+SI,Slovenia,Slovenia
+SE,Sweden,Sweden
+SZ,Eswatini,Eswatini
+SX,Sint Maarten (Dutch part),Sint Maarten (Dutch part)
+SC,Seychelles,Seychelles
+SY,Syrian Arab Republic,Syrian Arab Republic
+TC,Turks and Caicos Islands,Turks and Caicos Islands
+TD,Chad,Chad
+TG,Togo,Togo
+TH,Thailand,Thailand
+TJ,Tajikistan,Tajikistan
+TK,Tokelau,Tokelau
+TM,Turkmenistan,Turkmenistan
+TL,Timor-Leste,Timor-Leste
+TO,Tonga,Tonga
+TT,Trinidad and Tobago,Trinidad and Tobago
+TN,Tunisia,Tunisia
+TR,Turkey,Turkey
+TV,Tuvalu,Tuvalu
+TW,"Taiwan, Province of China","Taiwan, Province of China"
+TZ,"Tanzania, United Republic of","Tanzania, United Republic of"
+UG,Uganda,Uganda
+UA,Ukraine,Ukraine
+UM,United States Minor Outlying Islands,United States Minor Outlying Islands
+UY,Uruguay,Uruguay
+US,United States,United States
+UZ,Uzbekistan,Uzbekistan
+VA,Holy See (Vatican City State),Holy See (Vatican City State)
+VC,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines
+VE,"Venezuela, Bolivarian Republic of","Venezuela, Bolivarian Republic of"
+VG,"Virgin Islands, British","Virgin Islands, British"
+VI,"Virgin Islands, U.S.","Virgin Islands, U.S."
+VN,Viet Nam,Viet Nam
+VU,Vanuatu,Vanuatu
+WF,Wallis and Futuna,Wallis and Futuna
+WS,Samoa,Samoa
+YE,Yemen,Yemen
+ZA,South Africa,South Africa
+ZM,Zambia,Zambia
+ZW,Zimbabwe,Zimbabwe

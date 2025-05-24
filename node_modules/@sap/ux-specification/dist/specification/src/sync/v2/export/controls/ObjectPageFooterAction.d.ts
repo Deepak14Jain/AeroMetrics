@@ -1,0 +1,11 @@
+import type { v2 } from '@sap/ux-specification-types';
+import type { ButtonType } from 'sap/m/library';
+import type { URI } from 'sap/ui/core/library';
+export declare class ObjectPageFooterAction implements v2.ObjectPageFooterAction {
+    visible: boolean;
+    tooltip?: string;
+    icon?: URI;
+    activeIcon?: URI;
+    type?: ButtonType;
+}
+//# sourceMappingURL=ObjectPageFooterAction.d.ts.map

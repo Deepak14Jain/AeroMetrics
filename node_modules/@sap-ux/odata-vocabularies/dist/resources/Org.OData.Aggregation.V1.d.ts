@@ -1,0 +1,4 @@
+import type { CSDL } from '@sap-ux/vocabularies/CSDL';
+declare const _default: CSDL;
+export default _default;
+//# sourceMappingURL=Org.OData.Aggregation.V1.d.ts.map
