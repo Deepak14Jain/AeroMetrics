@@ -108,7 +108,8 @@ A complete Postman Collection `AeroMetrics.postman_collection.json` is included 
 ---
 ## 🙋 Contact
 For any questions, suggestions, or issues, feel free to reach out directly via project channels, GitHub. `I’m happy to help and eager to learn!`
-My mail ID: `deepak.jain05@sap.com` or `jaindeepak1401+git@gmail.com`
+
+My mail ID: [deepak.jain05@sap.com](deepak.jain05@sap.com) or [jaindeepak1401+git@gmail.com](jaindeepak1401+git@gmail.com)
 
 
 
